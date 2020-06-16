@@ -1,0 +1,185 @@
+<!doctype html>
+ <html lang="en">
+     <head>
+         
+         <title>A2A</title>
+      
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- The core Firebase JS SDK is always required and must be listed first -->
+
+      <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+
+      <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+      <script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-analytics.js"></script>
+</head>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDdDED0hQnIiadeQqeci6Kv6vepRPfUqHE",
+    authDomain: "a-2-a-18b97.firebaseapp.com",
+    databaseURL: "https://a-2-a-18b97.firebaseio.com",
+    projectId: "a-2-a-18b97",
+    storageBucket: "a-2-a-18b97.appspot.com",
+    messagingSenderId: "549969909860",
+    appId: "1:549969909860:web:8c5d044608d8f9b7c96771",
+    measurementId: "G-1V0S2K1SHW"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+var myName =prompt("Enter Your Name");
+function sendMessage(){
+var message=document.getElementById("message").value;
+firebase.database().ref("messages").push().set({
+"sender": myName,
+"message": message
+});
+return false;
+}
+firebase.database().rel("messages").on("child_added", function (snapshot){
+var html="";
+html +="<li>";
+html += snapshot.val().sender + ":" +snapshot.val(). message;
+html +="</li>";
+document.getElementById("messages"). innerHTML += html;
+});
+</script>
+  <body class="bg-light modal-dialog-scrollable ">
+    <header style="position: fixed; width:100%; z-index:2;">
+     <div class="container">
+      <div class="row bg-success">
+      <div class="col-md-6 text-light p-2 pl-1 my-auto">
+      
+          <h2 >A'2'A</h2>
+</div>
+     </div>
+      </div>
+   </header><br>
+   <section class="z-index:1;">
+<ul id="messages"></ul>
+   <script>
+
+    // listen for incoming messages
+
+    firebase.database().ref("messages").on("child_added", function (snapshot) {
+
+        var html = "";
+
+        // give each message a unique ID
+
+        html += "<li id='message-" + snapshot.key + "'>";
+
+        // show delete button if message is sent by me
+
+        if (snapshot.val().sender == myName) {
+
+            html += "<button data-id='" + snapshot.key + "' onclick='deleteMessage(this);'>";
+
+                html += "Delete";
+
+            html += "</button>";
+
+        }
+
+        html += snapshot.val().sender + ": " + snapshot.val().message;
+
+        html += "</li>";
+
+ 
+
+        document.getElementById("messages").innerHTML += html;
+
+    });
+function deleteMessage(self) {
+
+    // get message ID
+
+    var messageId = self.getAttribute("data-id");
+
+ 
+
+    // delete message
+
+    firebase.database().ref("messages").child(messageId).remove();
+
+}
+
+ 
+
+// attach listener for delete message
+
+firebase.database().ref("messages").on("child_removed", function (snapshot) {
+
+    // remove message node
+
+    document.getElementById("message-" + snapshot.key).innerHTML = "This message has been removed";
+
+});
+
+
+
+</script>
+<script>
+
+    function sendMessage() {
+
+        // get message
+
+        var message = document.getElementById("message").value;
+
+ 
+
+        // save in database
+
+        firebase.database().ref("messages").push().set({
+
+            "sender": myName,
+
+            "message": message
+
+        });
+
+ 
+
+        // prevent form from submitting
+
+        return false;
+
+    }
+
+</script>
+     </section>
+<br><br><br>
+ 
+<footer>
+       <div class="row fixed-bottom z-index:0;">
+    
+         <div class="col-md-6 d-flex flex-row"  >
+     <form onsubmit="return sendMessage();" >
+
+<input id="message" style="height:3em; width:22rem" placeholder="Enter message" autocomplete="off">
+
+
+
+<input style="height:3em;width:4em" type="submit" value="Sent">
+</div>
+</form>
+        </div>
+     </footer>
+
+   
+     
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ 
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     
+  </body>
+ </html>
+ 
